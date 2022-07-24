@@ -1,0 +1,37 @@
+<div class="card p-2 m-3">
+  <h5 class="mt-3">Listado de dulces</h5>
+  <div class="table-responsive">
+    <table class="table table-head-custom table-vertical-center">
+      <thead>
+        <tr class="text-left">
+          <th style="padding-left: 15px;">Nombre</th>
+          <th>Precio</th>
+          <th>Categoria</th>
+          <th>Imagen</th>
+          <th>Opciones</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let candy of candies">
+            <td>
+              {{candy.name_prod}}
+            </td>
+            <td>{{candy.price}}</td>
+            <td>{{candy.categorie.name_cat}}</td>
+            <td>
+              <div class="text-center">
+                <img style="height: 150px; width: 150px;" src="{{candy.image}}"/>
+              </div>
+            </td>
+            <td class="text-start">
+              <div class="d-flex text-start">
+                <a class="btn btn-primary m-1" routerLink="/edit/candy/{{candy._id}}">Editar</a>
+                <button class="btn btn-primary m-1" (click)="deleteCandy(candy._id)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <a class="btn btn-outline-danger" routerLink="/" >Volver</a>
+  </div>
+</div>

@@ -1,0 +1,155 @@
+<ul class="nav navbar-light fixed-top justify-content-center text-black p-2" style="background-color: #e3f2fd;" *ngIf="admin === false">
+  <li *ngFor="let categorie of categories" class="nav-item">
+    <a class="nav-link {{categorie.active}}" (click)="changeCategorie(categorie._id)">{{categorie.name_cat}}</a>
+  </li>
+</ul>
+<div class="text-start mt-5 pt-4 pl-2">
+  <span *ngIf="admin === true else inactive">
+    <p class="custom-control-label">Modo: Administrador</p>
+    <button (click)="changeRole()" class="btn btn-primary"> Cambiar a cliente </button>
+  </span>
+  <ng-template #inactive>
+    <p class="custom-control-label"> Modo: Cliente</p>
+    <button (click)="changeRole()" class="btn btn-danger"> Cambiar a administrador </button>
+  </ng-template>
+</div>
+<ng-container *ngIf="admin; else client">
+  <div class="card p-2 m-3">
+    <app-admin></app-admin>
+  </div>
+</ng-container>
+
+<ng-template #client>
+  <div class="card p-2 m-3">
+  <div class="text-end p-3 d-grid">
+    <a href="/register">Signup</a>
+    <span *ngIf="user.logged === false else logout">
+      <a href="/login">Login</a>
+    </span>
+    <ng-template #logout>
+      <a href="/logout">Logout</a>
+    </ng-template>
+  </div>
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active" style="background-image: url('../../assets/images/agridulces.jpg')"></div>
+        <div class="carousel-item" style="background-image: url('../../assets/images/dulces.jpg')"></div>
+        <div class="carousel-item" style="background-image: url('../../assets/images/salados.jpg')"></div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="text-end m-3">
+      <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#ShoppingCar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="d-flex p-2">
+      <select class="form-select w-25 me-2" (change)="orderby($event)">
+        <option value="-1">Order por costo</option>
+        <option value="-1">Mayor a menor</option>
+        <option value="1">Menor a mayor</option>
+      </select>
+      <input class="form-control w-25 me-2 " type="search" placeholder="Search" (change)="OnChangeText($event)" aria-label="Search">
+      <button class="btn btn-outline-primary" type="button" (click)="getCandies()">Search</button>
+    </div>
+    <div class="card-body py-0">
+      <div class="table-responsive">
+        <div style="overflow-x:auto;">
+          <div class="table-responsive">
+            <table class="table table-head-custom table-vertical-center">
+              <thead>
+                <tr class="text-left">
+                  <th style="padding-left: 15px;">Nombre</th>
+                  <th>Precio</th>
+                  <th>Categoria</th>
+                  <th>Imagen</th>
+                  <th>Añadir al carrito</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let candy of candies">
+                    <td>
+                      {{candy.name_prod}}
+                    </td>
+                    <td>{{candy.price}}</td>
+                    <td>{{candy.categorie.name_cat}}</td>
+                    <td>
+                      <div class="text-center">
+                        <img style="height: 150px; width: 150px; border-radius: 100%;" src="{{candy.image}}"/>
+                      </div>
+                    </td>
+                    <td class="pr-0 ">
+                      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <button class="btn btn-danger" type="button" [disabled]="candy.quantity <= 0" (click)="updateQuantity(candy,candy.quantity - 1)">-</button>
+                        <input type="text" class="form-control text-center" style="width: 50px;" value="{{candy.quantity ? candy.quantity : 0}}" readonly>
+                        <button class="btn btn-primary" type="button" (click)="updateQuantity(candy,candy.quantity + 1)">+</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal fade" id="ShoppingCar" tabindex="-1"aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Carrito de compras</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive">
+              <div style="overflow-x:auto;">
+                <div class="table-responsive">
+                  <table class="table table-head-custom table-vertical-center">
+                    <thead>
+                      <tr class="text-left">
+                        <th style="padding-left: 15px;">Nombre</th>
+                        <th>Precio</th>
+                        <th>Categoria</th>
+                        <th>Cantidad</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let candy of candiesAdded">
+                          <td>
+                            {{candy.name_prod}}
+                          </td>
+                          <td>{{candy.price}}</td>
+                          <td>{{candy.categorie.name_cat}}</td>
+                          <td>{{candy.quantity}}</td>
+                        </tr>
+                      </tbody>
+                  </table>
+                  <h5>Total: {{total}}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" (click)="emptyCart()" data-bs-dismiss="modal">Vaciar carrito</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary">Continuar comprando</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
