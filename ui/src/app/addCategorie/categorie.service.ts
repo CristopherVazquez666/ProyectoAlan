@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-const user = localStorage.getItem('access_token');
+const user = localStorage.getItem('token');
 @Injectable({
   providedIn: 'root'
 })

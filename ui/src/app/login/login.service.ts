@@ -8,4 +8,8 @@ export class LoginService {
 
 constructor(private _http: HttpClient) { }
 
+  login(data:any){
+    return this._http.post('/api/customer/login',data);
+  }
+
 }

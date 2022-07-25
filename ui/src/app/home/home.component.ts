@@ -42,9 +42,8 @@ export class HomeComponent implements OnInit {
 
   getUser(){
     this._home.getUser().subscribe((res:any)=>{
-      console.log("Respuesta del usuario",res)
-      if(res.data){
-        this.user = res.data;
+      if(res.customer){
+        this.user = res.customer;
       }
     })
   }
@@ -135,6 +134,14 @@ export class HomeComponent implements OnInit {
     }else{
       this.total = 0
     }
+  }
+
+  LogOut(){
+    this._home.logout(this.user._id).subscribe((res:any)=>{
+      localStorage.removeItem('token');
+      this.user = {logged:false};
+      this._cd.detectChanges ();
+    })
   }
 
   

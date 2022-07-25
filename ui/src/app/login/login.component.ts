@@ -1,18 +1,17 @@
 
-import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 import Swal from 'sweetalert2';
 
 
 @Component({
-	selector: 'kt-login',
+	selector: 'login',
 	templateUrl: './login.component.html', 
-	encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent{
 
-	loginForm: object | undefined;
+	loginForm:any = {};
 
 	constructor(
 		private router: Router,
@@ -24,7 +23,18 @@ export class LoginComponent{
 
 	}
 
+	onChange(e:any){
+		this.loginForm[e.target.name] = e.target.value;
+	}
+
 	signIn() {
-		//Here must be the petition
+		this.service.login(this.loginForm).subscribe(res=>{
+			if(res){
+				localStorage['token'] = res;
+				window.location.href = "/";
+			}else{
+				Swal.fire("Algo salio mal","Por favor verifique su informacion","error");
+			}
+		})
 	}
 }

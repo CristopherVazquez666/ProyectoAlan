@@ -6,7 +6,7 @@ exports.Create = async (req, res) =>{
         const customer = await CustomerModel.create(req.body).catch(err=>{
             return res.status(400).json({error: "Algo salio mal al intentar crear el cliente", mesage:err.message});
         })
-        return res.status(200).json(customer);
+        return res.status(200).json({customer});
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({error: "Algo salio mal al intentar crear el cliente"});
@@ -64,12 +64,31 @@ exports.Login = async (req, res) =>{
         if(!customer.isValidPassword(password)){
             return res.status(400).json({error: "Informacion errornea, verifique los datos"});
         }
-
+        await CustomerModel.findByIdAndUpdate(customer._id,{
+            $set:{
+                logged:true
+            }
+        })
         const token = await jwt.sign(customer.toJSON(), process.env.JWT_SECRET);
         if(!token){
             return res.status(400).json({error: "Error al crear el token"});
         }
         return res.status(200).json(token);
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({error: "Algo salio mal"});
+    }
+}
+
+exports.Logout = async (req, res) =>{
+    try {
+        const {id} = req.params;
+        await CustomerModel.findByIdAndUpdate(id,{
+            $set:{
+                logged:false
+            }
+        })
+        return res.status(200).json({message:'Customer logout successfully'});
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({error: "Algo salio mal"});

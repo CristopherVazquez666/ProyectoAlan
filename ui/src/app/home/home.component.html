@@ -22,12 +22,14 @@
 <ng-template #client>
   <div class="card p-2 m-3">
   <div class="text-end p-3 d-grid">
-    <a href="/register">Signup</a>
-    <span *ngIf="user.logged === false else logout">
+    <span *ngIf="user.logged === false else inSession">
+      <a href="/register">Signup</a>
+      <br/>
       <a href="/login">Login</a>
     </span>
-    <ng-template #logout>
-      <a href="/logout">Logout</a>
+    <ng-template #inSession>
+      <h5 class="text-start">Bienvenido de vuelta {{user.full_name}}</h5>
+      <a href="/" (click)="LogOut()">Logout</a>
     </ng-template>
   </div>
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">

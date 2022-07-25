@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-const user = localStorage.getItem('access_token');
+const user = localStorage.getItem('token');
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,8 @@ export class HomeService {
   }
   getUser(){
     return this._http.get(`/api/customer/validate`, { headers: {'Authorization': `Bearer ${user}`}});
+  }
+  logout(id:string){
+    return this._http.get(`/api/customer/logout/${id}`, { headers: {'Authorization': `Bearer ${user}`}});
   }
 }
