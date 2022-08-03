@@ -23,7 +23,7 @@
   <div class="card p-2 m-3">
   <div class="text-end p-3 d-grid">
     <span *ngIf="user.logged === false else inSession">
-      <a href="/register">Signup</a>
+      <a href="/register">Sign up</a>
       <br/>
       <a href="/login">Login</a>
     </span>
@@ -31,6 +31,7 @@
       <h5 class="text-start">Bienvenido de vuelta {{user.full_name}}</h5>
       <a href="/" (click)="LogOut()">Logout</a>
     </ng-template>
+    <a href="https://res.cloudinary.com/di3gptclj/image/upload/v1659557635/User_Manual_-_Dulceria_f2nrti.pdf" target="_blank">Download User Manual</a>
   </div>
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators">

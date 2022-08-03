@@ -28,7 +28,9 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getCandies();
     this.getCategories();
-    this.getUser();
+    if(localStorage.getItem('token')){
+      this.getUser();
+    }
   }
 
   orderby(e:any){
